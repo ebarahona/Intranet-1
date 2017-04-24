@@ -8,9 +8,9 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/toPromise';
 
-import {
-	INewsItem } from '../interfaces';
+import { INewsItem } from '../interfaces';
 import { ConfigService } from '../api_settings/config.service';
+import { TokenService } from '../data_services/jwt-token.service';
 
 @Injectable()
 export class DataService {
@@ -28,8 +28,10 @@ export class DataService {
 
     //get all News
     getNewsItems(): Observable<INewsItem[]> {
-        return this.http.get(this._baseUrl + 'newsitem')
-            .map((res: Response) => {
+        console.log(this.http)
+        return this.http.get(this._baseUrl)
+            .map((res: Response) => { 
+            console.log(res) 
                 return res.json();
             })
             .catch(this.handleError);

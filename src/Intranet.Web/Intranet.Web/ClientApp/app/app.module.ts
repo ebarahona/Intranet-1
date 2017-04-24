@@ -13,9 +13,10 @@ import { CounterComponent } from './components/counter/counter.component'
 import { NewsComponent } from './components/news/news.component'
 
 // Services
-
 import { DataService } from './shared/data_services/data.service'
 import { ConfigService } from './shared/api_settings/config.service'
+import { TokenService } from './shared/data_services/jwt-token.service'
+
 
 @NgModule({
     bootstrap: [ AppComponent ],
@@ -30,6 +31,7 @@ import { ConfigService } from './shared/api_settings/config.service'
     providers: [
         DataService,
         ConfigService,
+        TokenService,
     ],
     imports: [
         UniversalModule, // Must be first import. This automatically imports BrowserModule, HttpModule, and JsonpModule too.
