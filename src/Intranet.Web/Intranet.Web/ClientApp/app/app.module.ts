@@ -1,5 +1,5 @@
 ﻿import { NgModule } from '@angular/core'
-import { RouterModule } from '@angular/router'
+import { RouterModule, Routes } from '@angular/router'
 import { UniversalModule } from 'angular2-universal'
 import { HttpModule } from '@angular/http'
 
@@ -11,6 +11,9 @@ import { HomeComponent } from './components/home/home.component'
 import { FetchDataComponent } from './components/fetchdata/fetchdata.component'
 import { CounterComponent } from './components/counter/counter.component'
 import { NewsComponent } from './components/news/news.component'
+import { NewsNewComponent } from './components/news/news-new.component'
+import { NewsDetailComponent } from './components/news/news-detail.component'
+import { NewAtCertComponent } from './components/newatcert/newatcert.component'
 
 // Services
 import { DataService } from './shared/data_services/data.service'
@@ -26,7 +29,8 @@ import { TokenService } from './shared/data_services/jwt-token.service'
         CounterComponent,
         FetchDataComponent,
         HomeComponent,
-        NewsComponent
+        NewsComponent,NewsNewComponent,NewsDetailComponent,
+        NewAtCertComponent
     ],
     providers: [
         DataService,
@@ -41,6 +45,9 @@ import { TokenService } from './shared/data_services/jwt-token.service'
             { path: 'counter', component: CounterComponent },
             { path: 'fetch-data', component: FetchDataComponent },
             { path: 'news', component: NewsComponent },
+            { path: 'news-new', component: NewsNewComponent },
+            { path: 'news-detail/:id', component: NewsDetailComponent },
+            { path: 'newatcert', component: NewAtCertComponent},
             { path: '**', redirectTo: 'home' }
         ])
     ]

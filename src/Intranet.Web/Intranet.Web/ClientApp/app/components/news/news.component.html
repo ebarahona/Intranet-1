@@ -1,15 +1,26 @@
 <h1>Certaincy News</h1>
 
-<div class="row">
-        <div class="col s12 m4 " *ngFor="let newsitem of newsitems">
-                <div class="card z-depth-3">
-                        <div class="card-content">
-                                <span class="card-title">
-                                        <b>{{newsitem.title}}</b> 
-                                </span>
-                                <p> {{newsitem.text}} </p>
-                                <p><b>Författare:</b> {{newsitem.author}}</p>
-                        </div>
+<div>
+    <div>
+        <a [routerLink]="['/news-new']">
+          <button>add</button>
+        </a>
+    </div>
+    <div *ngFor="let newsitem of newsitems">
+        <div>
+            <div>
+                <span>                   
+                    <h2>{{newsitem.title}}</h2> 
+                    <p><em>{{newsitem.date | date}}</em></p>
+                </span>
+                <p> {{newsitem.text}} </p>
+                <p><b>Författare:</b> {{newsitem.author}}</p><div>
+                    <a [routerLink]="['/news-detail', newsitem.id]">
+                        <button>Läs</button>
+                    </a>
                 </div>
+            </div>
         </div>
+    </div>
 </div>
+

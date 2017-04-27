@@ -20,25 +20,46 @@ export class DataService {
     _baseUrl: string = '';
 
     constructor(private http: Http,
-        private configService: ConfigService) {
-        this._baseUrl = configService.getApiURI();
+                private configService: ConfigService) {
+                this._baseUrl = configService.getApiURI();
     }
 
 // NEWS SERVICES ************************************************************  /
 
     //get all News
     getNewsItems(): Observable<INewsItem[]> {
-        console.log(this.http)
         return this.http.get(this._baseUrl)
-            .map((res: Response) => { 
-            console.log(res) 
+                        .map((res: Response) => { 
+                            return res.json();
+                        })
+                        .catch(this.handleError);
+    }
+
+    //get a specific news by Id
+    getNewsItem(id: number): Observable<INewsItem> {
+        console.log("HHHHHHHHHHEAPHOAHIFIPEHAF: " + id + ", type: " + typeof(id))
+        return this.http.get(this._baseUrl + id)
+            .map((res: Response) => {
                 return res.json();
             })
             .catch(this.handleError);
     }
 
+    //create a new NewsItem
+    createNewsItem(title:string, date:Date, text:string, author:string): Observable<INewsItem> {
+        let body = JSON.stringify({title:title, date:date, text:text, author:author});
 
-    private handleError(error: any) {
+        return this.http.post(this._baseUrl, body, { headers: this.headers })
+                        .map(res => res.json().data as INewsItem)
+                        .catch(this.handleError);
+    }
+
+// NEW AT CERTAINCY SERVICE ************************************************  /
+
+    // get checklista
+    //getNewAtCert():
+
+    private handleError (error: Response | any) {
         var applicationError = error.headers.get('Application-Error');
         var serverError = error.json();
         var modelStateErrors: string = '';

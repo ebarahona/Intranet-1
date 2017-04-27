@@ -8,17 +8,22 @@ import { DataService } from '../../shared/data_services/data.service';
 })
 export class NewsComponent implements OnInit {
 	newsitems: INewsItem[];
+	selectedNewsitem: INewsItem;	
 
 	constructor(private dataService: DataService) { }
 	ngOnInit() {
-		console.log(this)
-		console.trace(this)
 		this.dataService.getNewsItems().subscribe((newsitems:INewsItem[]) => {
 			this.newsitems = newsitems;
+			console.log('Newsitems loaded')
 		},
 		error => {
 			console.log('Failed to load newsitems '+error);
 		});
-	}		
+	}
+
+	onSelect(newsitem:INewsItem):void{
+    	this.selectedNewsitem = newsitem;
+    }
+
 }
 
