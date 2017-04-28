@@ -13,7 +13,7 @@ import { CounterComponent } from './components/counter/counter.component'
 import { NewsComponent } from './components/news/news.component'
 import { NewsNewComponent } from './components/news/news-new.component'
 import { NewsDetailComponent } from './components/news/news-detail.component'
-import { NewAtCertComponent } from './components/newatcert/newatcert.component'
+import { ChecklistComponent } from './components/checklist/checklist.component'
 
 // Services
 import { DataService } from './shared/data_services/data.service'
@@ -29,8 +29,8 @@ import { TokenService } from './shared/data_services/jwt-token.service'
         CounterComponent,
         FetchDataComponent,
         HomeComponent,
-        NewsComponent,NewsNewComponent,NewsDetailComponent,
-        NewAtCertComponent
+        NewsComponent, NewsNewComponent, NewsDetailComponent,
+        ChecklistComponent
     ],
     providers: [
         DataService,
@@ -47,7 +47,7 @@ import { TokenService } from './shared/data_services/jwt-token.service'
             { path: 'news', component: NewsComponent },
             { path: 'news-new', component: NewsNewComponent },
             { path: 'news-detail/:id', component: NewsDetailComponent },
-            { path: 'newatcert', component: NewAtCertComponent},
+            { path: 'checklist', component: ChecklistComponent},
             { path: '**', redirectTo: 'home' }
         ])
     ]

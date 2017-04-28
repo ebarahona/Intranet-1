@@ -1,0 +1,38 @@
+<div class="container">
+<h1>Create News</h1>
+    <form >
+      <div class="row">
+        <div class="input-field col s12">
+          <input id="name" type="text" class="form-control validate" #title required>
+          <label for="name">News title</label>
+        </div>
+      </div>
+
+    <div class="row">
+        <div class="input-field col s12">
+            <input id="description" active type="text" class="form-control validate" #date required>
+            <label for="description">News date</label>            
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="input-field col s12">
+            <input id="description" active type="text" class="form-control validate" #text required>
+            <label for="description">News text</label>            
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="input-field col s12">
+            <input id="description" active type="text" class="form-control validate" #author required>
+            <label for="description">News author</label>            
+        </div>
+    </div>
+        
+    <div class="row">
+            <button class="btn waves-effect waves-light right" type="submit" name="action" (click)="addNewsItem(title.value ,date.value,text.value,author.value)">Create News
+            </button>
+            <a md-button class="btn right waves-effect waves-light" (click)="goBack()">Back</a>
+    </div>
+    </form>
+</div>
