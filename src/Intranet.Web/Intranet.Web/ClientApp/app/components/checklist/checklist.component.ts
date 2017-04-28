@@ -18,7 +18,9 @@ export class ChecklistComponent implements OnInit {
         this.dataService.getChecklist().subscriibe((checklist: IChecklist[]) => {
         this.checklist = checklist
             console.log('Checklist loaded')
-        error => {
-        console.log('Faild to load checklist ' + error )
-    }
+            error => {
+            console.log('Faild to load checklist ' + error)
+            }
+        })
+    }   
 }

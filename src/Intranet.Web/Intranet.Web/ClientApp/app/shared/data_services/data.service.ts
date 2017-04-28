@@ -67,13 +67,13 @@ export class DataService {
     }
 
     private handleError (error: Response | any) {
-        const applicationError = error.headers.get('constlication-Error')
-        const serverError = error.json()
-        const modelStateErrors: string = ''
+        let applicationError = error.headers.get('constlication-Error')
+        let serverError = error.json()
+        let modelStateErrors: string = ''
 
         if (!serverError.type) {
             console.log(serverError)
-            for (const key in serverError) {
+            for (let key in serverError) {
                 if (serverError[key])
                     modelStateErrors += serverError[key] + '\n'
             }
