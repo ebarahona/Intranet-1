@@ -6,6 +6,16 @@
           <button>add</button>
         </a>
     </div>
+    <div>
+        <md-input-container>
+            <input mdInput placeholder="Name" name="value">
+        </md-input-container>
+        <a md-button color="primary">Flat button</a>
+        <a md-raised-button color="accent">Raised button</a>
+        <a md-fab color="primary"><md-icon mdPrefix>check</md-icon></a>
+        <a md-mini-fab color="primary"><md-icon mdSuffix>check</md-icon></a>
+    </div>
+
     <div *ngFor="let newsitem of newsitems">
         <div>
             <div>

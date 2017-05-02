@@ -1,10 +1,13 @@
 import { Component, OnInit } from '@angular/core'
 import {INewsItem} from '../../shared/interfaces'
 import { DataService } from '../../shared/data_services/data.service'
+import { MaterialModule } from '@angular/material'
 
 @Component({
     selector: 'news',
     templateUrl: './news.component.html',
+    styleUrls: ['../../styles.css']
+
 })
 export class NewsComponent implements OnInit {
     newsitems: INewsItem[]

@@ -1,7 +1,8 @@
-﻿import { NgModule } from '@angular/core'
+﻿import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
 import { RouterModule, Routes } from '@angular/router'
 import { UniversalModule } from 'angular2-universal'
 import { HttpModule } from '@angular/http'
+import { MaterialModule } from '@angular/material'
 
 // Imports for loading & configuring the in-memory web api
 
@@ -14,6 +15,7 @@ import { NewsComponent } from './components/news/news.component'
 import { NewsNewComponent } from './components/news/news-new.component'
 import { NewsDetailComponent } from './components/news/news-detail.component'
 import { ChecklistComponent } from './components/checklist/checklist.component'
+
 
 // Services
 import { DataService } from './shared/data_services/data.service'
@@ -39,6 +41,7 @@ import { TokenService } from './shared/data_services/jwt-token.service'
     ],
     imports: [
         UniversalModule, // Must be first import. This automatically imports BrowserModule, HttpModule, and JsonpModule too.
+        MaterialModule,
         RouterModule.forRoot([
             { path: '', redirectTo: 'home', pathMatch: 'full' },
             { path: 'home', component: HomeComponent },
@@ -50,7 +53,8 @@ import { TokenService } from './shared/data_services/jwt-token.service'
             { path: 'checklist', component: ChecklistComponent},
             { path: '**', redirectTo: 'home' }
         ])
-    ]
+    ],
+    schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
 })
 export class AppModule {
 }
