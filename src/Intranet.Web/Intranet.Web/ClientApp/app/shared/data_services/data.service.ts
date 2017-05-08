@@ -58,8 +58,8 @@ export class DataService {
 // NEW AT CERTAINCY SERVICE ************************************************  /
 
     // get checklista
-    getNewAtCert(): Observable<IChecklist[]> {
-        return this.http.get(this._mockUrl)
+    getChecklist(): Observable<IChecklist[]> {
+        return this.http.get(this._mockUrl + 'checklist/')
             .map((res: Response) => {
                 return res.json()
         })
