@@ -18,12 +18,14 @@ var apiDomainDir = Directory("./Intranet.API/Intranet.API.Domain");
 var apiTestsDir = Directory("./Intranet.API/Intranet.API.UnitTests");
 var webDir = Directory("./Intranet.Web/Intranet.Web");
 var webTestsDir = Directory("./Intranet.Web/Intranet.Web.UnitTests");
+var e2eTestsDir = Directory("./Intranet.SeleniumTests");
 
 var apiBuildDir = Directory(apiDir) + Directory("bin") + Directory(configuration);
 var apiDomainBuildDir = Directory(apiDomainDir) + Directory("bin") + Directory(configuration);
 var apiTestsBuildDir = Directory(apiTestsDir) + Directory("bin") + Directory(configuration);
 var webBuildDir = Directory(webDir) + Directory("bin") + Directory(configuration);
 var webTestsBuildDir = Directory(webTestsDir) + Directory("bin") + Directory(configuration);
+var e2eTestsBuildDir = Directory(e2eTestsDir) + Directory("bin") + Directory(configuration);
 
 var apiBuildDirs = new [] { apiBuildDir, apiDomainBuildDir, apiTestsBuildDir };
 var apiSrcDirs = new [] { apiDir, apiDomainDir, apiTestsDir };
@@ -65,6 +67,12 @@ Task("Web:Clean")
     };
 });
 
+Task("E2E:Clean")
+    .Does(() =>
+{
+    CleanDirectory(e2eTestsBuildDir);
+});
+
 Task("API:Restore-NuGet-Packages")
     .IsDependentOn("API:Clean")
     .Does(() =>
@@ -83,6 +91,13 @@ Task("Web:Restore-NuGet-Packages")
     {
         DotNetCoreRestore(dir);
     };
+});
+
+Task("E2E:Restore-NuGet-Packages")
+    .IsDependentOn("E2E:Clean")
+    .Does(() =>
+{
+    DotNetCoreRestore(e2eTestsDir);
 });
 
 Task("API:Build")
@@ -105,6 +120,13 @@ Task("Web:Build")
     };
 });
 
+Task("E2E:Build")
+    .IsDependentOn("E2E:Restore-NuGet-Packages")
+    .Does(() =>
+{
+    DotNetCoreBuild(e2eTestsDir, buildSettings);
+});
+
 Task("API:Run-Unit-Tests")
     .IsDependentOn("API:Build")
     .Does(() =>
@@ -119,13 +141,21 @@ Task("Web:Run-Unit-Tests")
     DotNetCoreTest("./Intranet.Web/Intranet.Web.UnitTests/Intranet.Web.UnitTests.csproj", testSettings);
 });
 
+Task("E2E:Run-End2End-Tests")
+    .IsDependentOn("E2E:Build")
+    .Does(() =>
+{
+    DotNetCoreTest("./Intranet.SeleniumTests/Intranet.SeleniumTests.csproj", testSettings);
+});
+
 //////////////////////////////////////////////////////////////////////
 // TASK TARGETS
 //////////////////////////////////////////////////////////////////////
 
 Task("Default")
     .IsDependentOn("API:Run-Unit-Tests")
-    .IsDependentOn("Web:Run-Unit-Tests");
+    .IsDependentOn("Web:Run-Unit-Tests")
+    .IsDependentOn("E2E:Run-End2End-Tests");
 
 //////////////////////////////////////////////////////////////////////
 // EXECUTION
