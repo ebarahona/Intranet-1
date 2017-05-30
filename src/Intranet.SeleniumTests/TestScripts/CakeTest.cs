@@ -27,7 +27,8 @@ namespace Intranet.SeleniumTests
         [InlineData("http://www.certaincy.com/", "Certaincy")]
         public void CertaincyTest(string url, string keyword)
         {
-            driver = new PhantomJSDriver(ApplicationEnvironment.ApplicationBasePath);
+            //driver = new PhantomJSDriver(ApplicationEnvironment.ApplicationBasePath);
+            driver = new PhantomJSDriver();
             driver.Navigate().GoToUrl(url);
             Assert.True(driver.Title.Contains(keyword));
         }
