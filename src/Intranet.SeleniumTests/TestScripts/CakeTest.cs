@@ -1,4 +1,5 @@
-﻿using Microsoft.DotNet.PlatformAbstractions;
+﻿using Intranet.SeleniumTests.Framework;
+using Microsoft.DotNet.PlatformAbstractions;
 using OpenQA.Selenium;
 using OpenQA.Selenium.PhantomJS;
 using OpenQA.Selenium.Remote;
@@ -9,7 +10,6 @@ namespace Intranet.SeleniumTests
 {
     public class CakeTest : IDisposable
     {
-        private IWebDriver driver;
 
         public CakeTest()
         {
@@ -19,18 +19,20 @@ namespace Intranet.SeleniumTests
         public void Dispose()
         {
             //Teardown
-            driver.Quit();
+            SeleniumDriver.driver.Quit();
         }
 
 
         [Theory]
         [InlineData("http://www.certaincy.com/", "Certaincy")]
+        [InlineData("http://www.google.com", "Google")]
+        [InlineData("http://www.certaincy.com/", "Google")]
         public void CertaincyTest(string url, string keyword)
         {
             //driver = new PhantomJSDriver(ApplicationEnvironment.ApplicationBasePath);
-            driver = new PhantomJSDriver();
-            driver.Navigate().GoToUrl(url);
-            Assert.True(driver.Title.Contains(keyword));
+            SeleniumDriver.driver = new PhantomJSDriver();
+            SeleniumDriver.driver.Navigate().GoToUrl(url);
+            Assert.True(SeleniumDriver.driver.Title.Contains(keyword));
         }
     }
 }
