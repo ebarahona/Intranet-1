@@ -26,7 +26,6 @@ namespace Intranet.SeleniumTests
         [Theory]
         [InlineData("http://www.certaincy.com/", "Certaincy")]
         [InlineData("http://www.google.com", "Google")]
-        [InlineData("http://www.certaincy.com/", "Google")]
         public void CertaincyTest(string url, string keyword)
         {
             //driver = new PhantomJSDriver(ApplicationEnvironment.ApplicationBasePath);
