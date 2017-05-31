@@ -8,10 +8,10 @@ using Xunit;
 
 namespace Intranet.SeleniumTests
 {
-    public class CakeTest : IDisposable
+    public class SeleniumBasics : IDisposable
     {
 
-        public CakeTest()
+        public SeleniumBasics()
         {
             //Setup
             SeleniumDriver.Init(Browser.PhantomJS);
@@ -27,10 +27,10 @@ namespace Intranet.SeleniumTests
         [Theory]
         [InlineData("http://www.certaincy.com/", "Certaincy")]
         [InlineData("http://www.google.com", "Google")]
-        public void CertaincyTest(string url, string keyword)
+        public void SeleniumCommunicationOK(string url, string keyword)
         {
-            SeleniumDriver.driver.Navigate().GoToUrl(url);
-            Assert.True(SeleniumDriver.driver.Title.Contains(keyword));
+            SeleniumNavigate.GoToUrl(url);
+            Assert.True(SeleniumDriver.Driver.Title.Contains(keyword));
         }
     }
 }

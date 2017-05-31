@@ -15,7 +15,7 @@ namespace Intranet.SeleniumTests.Framework
 
     public class SeleniumDriver
     {
-        public static IWebDriver driver;
+        public static IWebDriver Driver;
 
         public static void Init(Browser browser)
         {
@@ -23,12 +23,12 @@ namespace Intranet.SeleniumTests.Framework
             {
                 case Browser.PhantomJS:
                     {
-                        driver = new PhantomJSDriver();
+                        Driver = new PhantomJSDriver();
                         break;
                     }
                 case Browser.FireFox:
                     {
-                        driver = new FirefoxDriver();
+                        Driver = new FirefoxDriver();
                         break;
                     }
             }
@@ -36,7 +36,7 @@ namespace Intranet.SeleniumTests.Framework
 
         public static void Kill()
         {
-            driver.Quit();
+            Driver.Quit();
         }
 
     }
