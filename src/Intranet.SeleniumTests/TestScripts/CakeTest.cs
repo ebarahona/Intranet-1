@@ -14,12 +14,13 @@ namespace Intranet.SeleniumTests
         public CakeTest()
         {
             //Setup
+            SeleniumDriver.Init(Browser.PhantomJS);
         }
 
         public void Dispose()
         {
             //Teardown
-            SeleniumDriver.driver.Quit();
+            SeleniumDriver.Kill();
         }
 
 
@@ -28,8 +29,6 @@ namespace Intranet.SeleniumTests
         [InlineData("http://www.google.com", "Google")]
         public void CertaincyTest(string url, string keyword)
         {
-            //driver = new PhantomJSDriver(ApplicationEnvironment.ApplicationBasePath);
-            SeleniumDriver.driver = new PhantomJSDriver();
             SeleniumDriver.driver.Navigate().GoToUrl(url);
             Assert.True(SeleniumDriver.driver.Title.Contains(keyword));
         }
