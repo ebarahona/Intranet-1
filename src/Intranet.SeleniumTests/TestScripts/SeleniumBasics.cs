@@ -27,6 +27,7 @@ namespace Intranet.SeleniumTests
         [Theory]
         [InlineData("http://www.certaincy.com/", "Certaincy")]
         [InlineData("http://www.google.com", "Google")]
+        [InlineData("http://localhost:5000", "Intranet")]
         public void SeleniumCommunicationOK(string url, string keyword)
         {
             SeleniumNavigate.GoToUrl(url);

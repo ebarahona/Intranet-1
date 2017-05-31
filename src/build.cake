@@ -141,6 +141,20 @@ Task("Web:Run-Unit-Tests")
     DotNetCoreTest("./Intranet.Web/Intranet.Web.UnitTests/Intranet.Web.UnitTests.csproj", testSettings);
 });
 
+Task("API:Run")
+    .IsDependentOn("API:Run-Unit-Tests")
+    .Does(() =>
+{
+    DotNetCoreRun("./Intranet.API/Intranet.API");
+});
+
+Task("Web:Run")
+    .IsDependentOn("Web:Run-Unit-Tests")
+    .Does(() =>
+{
+    DotNetCoreRun("./Intranet.Web/Intranet.Web");
+});
+
 Task("E2E:Run-End2End-Tests")
     .IsDependentOn("E2E:Build")
     .Does(() =>
@@ -148,14 +162,28 @@ Task("E2E:Run-End2End-Tests")
     DotNetCoreTest("./Intranet.SeleniumTests/Intranet.SeleniumTests.csproj", testSettings);
 });
 
+//Task("Web:TearDown")
+//    .Does(() =>
+//{
+//    ...
+//});
+
+//Task("API:TearDown")
+//    .Does(() =>
+//{
+//    ...
+//});
+
 //////////////////////////////////////////////////////////////////////
 // TASK TARGETS
 //////////////////////////////////////////////////////////////////////
 
 Task("Default")
-    .IsDependentOn("API:Run-Unit-Tests")
-    .IsDependentOn("Web:Run-Unit-Tests")
+    .IsDependentOn("API:Run")
+    .IsDependentOn("Web:Run")
     .IsDependentOn("E2E:Run-End2End-Tests");
+//    .IsDependentOn("Web.TearDown")
+//    .IsDependentOn("API.TearDown")
 
 //////////////////////////////////////////////////////////////////////
 // EXECUTION
