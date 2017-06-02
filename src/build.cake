@@ -1,6 +1,7 @@
 ﻿//////////////////////////////////////////////////////////////////////
 // ARGUMENTS
 //////////////////////////////////////////////////////////////////////
+#addin nuget:https://www.myget.org/f/righthand-test/?package=Cake.Docker
 
 var target = Argument("target", "Default");
 var configuration =
@@ -19,8 +20,6 @@ var apiTestsDir = Directory("./Intranet.API/Intranet.API.UnitTests");
 var webDir = Directory("./Intranet.Web/Intranet.Web");
 var webTestsDir = Directory("./Intranet.Web/Intranet.Web.UnitTests");
 var e2eTestsDir = Directory("./Intranet.SeleniumTests");
-
-var e2eTestsBuildDir = Directory(e2eTestsDir) + Directory("bin") + Directory(configuration);
 
 Func<String, String> GetBuildDirectory = (dir) => Directory(dir) + Directory("bin") + Directory(configuration);
 
@@ -57,7 +56,7 @@ Task("Web:Clean")
 Task("E2E:Clean")
     .Does(() =>
 {
-    CleanDirectory(e2eTestsBuildDir);
+    CleanDirectory(GetBuildDirectory(e2eTestsDir));
 });
 
 Task("API:Restore-NuGet-Packages")
@@ -121,11 +120,11 @@ Task("Web:Run-Unit-Tests")
 });
 
 Task("API:Run")
-    .IsDependentOn("API:Run-Unit-Tests")
-    .Does(() =>
-{
-    DotNetCoreRun("./Intranet.API/Intranet.API");
-});
+     .IsDependentOn("API:Run-Unit-Tests")
+     .Does(() =>
+ {
+     DotNetCoreRun("./Intranet.API/Intranet.API");
+ });
 
 Task("Web:Run")
     .IsDependentOn("Web:Run-Unit-Tests")
@@ -133,6 +132,7 @@ Task("Web:Run")
 {
     DotNetCoreRun("./Intranet.Web/Intranet.Web");
 });
+
 
 Task("E2E:Run-End2End-Tests")
     .IsDependentOn("E2E:Build")
