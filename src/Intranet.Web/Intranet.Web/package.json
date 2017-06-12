@@ -75,6 +75,10 @@
       "tsx",
       "js"
     ],
-    "testRegex": "(.+\\.(test|spec))\\.(ts|js|tsx)$"
+    "testRegex": "(.+\\.(test|spec))\\.(ts|js|tsx)$",
+    "globals": {
+      "__TS_CONFIG__": "./tsconfig.json",
+      "__TRANSFORM_HTML__": "true"
+    }
   }
 }
