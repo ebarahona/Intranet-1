@@ -8,6 +8,7 @@ before_script:
 script:
 - cd src
 - ./build.sh
+- npm install -g jest jest-preset-angular jest-zone-patch typescript zone.js 
 - jest --verbose
 
 cache:
