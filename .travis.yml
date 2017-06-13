@@ -8,7 +8,6 @@ before_script:
 script:
 - cd src
 - ./build.sh
-- npm install jest jest-preset-angular jest-zone-patch
 - jest --verbose
 
 cache:
