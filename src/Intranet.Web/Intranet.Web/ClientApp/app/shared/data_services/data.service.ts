@@ -101,7 +101,7 @@ export class DataService {
     }
 
     // get profiles checklist
-    getProfileChecklist(id: number): Observable<IChecklist[]> {
+    XgetProfileChecklist(id: number): Observable<IChecklist[]> {
         return this.http.get(this._baseUrl + 'profile/' + id + '/checklist')
             .map((res: Response) => {
                 console.log(res)
