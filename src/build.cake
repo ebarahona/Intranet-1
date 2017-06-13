@@ -1,6 +1,7 @@
 ﻿//////////////////////////////////////////////////////////////////////
 // ARGUMENTS
 //////////////////////////////////////////////////////////////////////
+#addin "Cake.Npm"
 
 var target = Argument("target", "Default");
 var configuration =
@@ -95,6 +96,7 @@ Task("Web:Run-Unit-Tests")
     .Does(() =>
 {
     DotNetCoreTest("./Intranet.Web/Intranet.Web.UnitTests/Intranet.Web.UnitTests.csproj", testSettings);
+    NpmRunScript("test", settings => settings.FromPath("./Intranet.Web/Intranet.Web"));
 });
 
 //////////////////////////////////////////////////////////////////////
