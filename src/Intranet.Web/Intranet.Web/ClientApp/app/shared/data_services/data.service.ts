@@ -145,14 +145,14 @@ export class DataService {
     // CHECKLIST SERVICE ************************************************  /
 
     // get profiles checklist
-    //getProfileChecklist(id: number): Observable<IChecklist[]> {
-    //    return this.http.get(this._baseUrl + 'profile/' + id + '/checklist')
-    //        .map((res: Response) => {
-    //            console.log(res)
-    //            return res.json()
-    //        })
-    //        .catch(this.handleError)
-    //}
+    getProfileChecklist(id: number): Observable<IChecklist[]> {
+        return this.http.get(this._baseUrl + 'profile/' + id + '/checklist')
+            .map((res: Response) => {
+                console.log(res)
+                return res.json()
+            })
+            .catch(this.handleError)
+    }
 
     // update checklist
     updateProfileChecklist(profileId: number, todo: IChecklist): Observable<void> {
