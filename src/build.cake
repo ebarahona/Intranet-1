@@ -81,7 +81,7 @@ Task("Web:Build")
     .Does(() =>
 {
     DotNetCoreBuild(webDir, buildSettings);
-    NpmInstall(settings => settings.FromPath("./Intranet.Web/Intranet.Web"));
+    Npm.WithLogLevel(NpmLogLevel.Warn).Install(settings => settings.FromPath("./Intranet.Web/Intranet.Web"));
     DotNetCoreBuild(webTestsDir, buildSettings);
 });
 
