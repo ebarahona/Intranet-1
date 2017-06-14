@@ -122,10 +122,25 @@ Task("Web:Run-Unit-Tests")
     NpmRunScript("test", settings => settings.FromPath("./Intranet.Web/Intranet.Web"));
 });
 
-Task("API:Run")
+Task("API:Publish")
      .IsDependentOn("API:Run-Unit-Tests")
      .Does(() =>
  {
+     DotNetCorePublish("./Intranet.API/Intranet.API");
+ });
+
+ Task("Web:Publish")
+     .IsDependentOn("Web:Run-Unit-Tests")
+     .Does(() =>
+ {
+     DotNetCorePublish("./Intranet.Web/Intranet.Web");
+ });
+ 
+Task("API:Run")
+     //.IsDependentOn("API:Publish")
+     .Does(() =>
+ {
+     //DotNetCoreExecute("./Intranet.API/Intranet.API/bin/Debug/netcoreapp1.1/publish/Intranet.API.dll");
      DotNetCoreRun("./Intranet.API/Intranet.API");
  });
 
@@ -133,7 +148,7 @@ Task("Web:Run")
     .IsDependentOn("Web:Run-Unit-Tests")
     .Does(() =>
 {
-    DotNetCoreRun("./Intranet.Web/Intranet.Web");
+    ...
 });
 
 
@@ -160,9 +175,9 @@ Task("E2E:Run-End2End-Tests")
 // TASK TARGETS
 //////////////////////////////////////////////////////////////////////
 
-Task("Default")
-    .IsDependentOn("API:Run")
-    .IsDependentOn("Web:Run")
+Task("Default").IsDependentOn("All:DockerRun");
+    .IsDependentOn("API:Build")
+    .IsDependentOn("Web:Build");
     .IsDependentOn("E2E:Run-End2End-Tests");
 //    .IsDependentOn("Web.TearDown")
 //    .IsDependentOn("API.TearDown")
