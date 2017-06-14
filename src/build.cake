@@ -20,8 +20,6 @@ var apiTestsDir = Directory("./Intranet.API/Intranet.API.UnitTests");
 var webDir = Directory("./Intranet.Web/Intranet.Web");
 var webTestsDir = Directory("./Intranet.Web/Intranet.Web.UnitTests");
 
-Func<String, String> GetBuildDirectory = (dir) => Directory(dir) + Directory("bin") + Directory(configuration);
-
 // Define settings.
 var buildSettings = new DotNetCoreBuildSettings
 {
@@ -41,15 +39,15 @@ var testSettings = new DotNetCoreTestSettings
 Task("API:Clean")
     .Does(() =>
 {
-    CleanDirectory(GetBuildDirectory(apiDir));
-    CleanDirectory(GetBuildDirectory(apiTestsDir));
+    CleanDirectories(GetDirectories("./Intranet.API/**/bin"));
 });
 
 Task("Web:Clean")
     .Does(() =>
 {
-    CleanDirectory(GetBuildDirectory(webDir));
-    CleanDirectory(GetBuildDirectory(webTestsDir));
+    CleanDirectories(GetDirectories("./Intranet.Web/**/bin"));
+    CleanDirectory(Directory("./Intranet.Web/Intranet.Web/wwwroot/dist"), fileSystemInfo => !fileSystemInfo.Path.FullPath.Contains("_placeholder"));
+    CleanDirectory(Directory("./Intranet.Web/Intranet.Web/node_modules"));
 });
 
 Task("API:Restore-NuGet-Packages")
