@@ -47,7 +47,7 @@ Task("Web:Clean")
 {
     CleanDirectories(GetDirectories("./Intranet.Web/**/bin"));
     CleanDirectory(Directory("./Intranet.Web/Intranet.Web/wwwroot/dist"), fileSystemInfo => !fileSystemInfo.Path.FullPath.Contains("_placeholder"));
-    CleanDirectory(Directory("./Intranet.Web/Intranet.Web/node_modules"));
+    DeleteDirectory("./Intranet.Web/Intranet.Web/node_modules", recursive: true);
 });
 
 Task("API:Restore-NuGet-Packages")
