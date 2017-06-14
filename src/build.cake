@@ -2,6 +2,7 @@
 // ARGUMENTS
 //////////////////////////////////////////////////////////////////////
 #addin nuget:https://www.myget.org/f/righthand-test/?package=Cake.Docker
+#addin "Cake.Npm"
 
 var target = Argument("target", "Default");
 var configuration =
@@ -95,6 +96,7 @@ Task("Web:Build")
     .Does(() =>
 {
     DotNetCoreBuild(webDir, buildSettings);
+    NpmInstall(settings => settings.FromPath("./Intranet.Web/Intranet.Web").WithLogLevel(NpmLogLevel.Warn));
     DotNetCoreBuild(webTestsDir, buildSettings);
 });
 
@@ -117,6 +119,7 @@ Task("Web:Run-Unit-Tests")
     .Does(() =>
 {
     DotNetCoreTest("./Intranet.Web/Intranet.Web.UnitTests/Intranet.Web.UnitTests.csproj", testSettings);
+    NpmRunScript("test", settings => settings.FromPath("./Intranet.Web/Intranet.Web"));
 });
 
 Task("API:Run")

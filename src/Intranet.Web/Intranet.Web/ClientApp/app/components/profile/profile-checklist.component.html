@@ -1,11 +1,17 @@
 <div class="container-fluid">
   <h3>New at Certaincy</h3>&nbsp;
-    <div class="row" *ngFor="let todo of todos">
-      <div class="list-group checked-list-box">
-        <a href="#" class="list-group-item" data-style="button" data-color="sucess">{{todo.description}}<input type="checkbox" class="pull-right"></a>
-      </div>
+    <div class="list-group">
+      <label for="todos">Todos:</label>
+        <ul *ngFor="let todo of todos" style="list-style-type:none">
+            <li>
+               <input type="checkbox" 
+                      name="isChecked" 
+                      [(ngModel)]="todo.isChecked">&nbsp;
+                {{todo.description}}       
+            </li>
+        </ul>
     </div>
     <div>
-      <button type="submit" class="btn btn-primary">Done!</button> 
+      <button type="submit" class="btn btn-primary" (click)="updateProfileChecklist()">Done!</button> 
     </div>
 </div>

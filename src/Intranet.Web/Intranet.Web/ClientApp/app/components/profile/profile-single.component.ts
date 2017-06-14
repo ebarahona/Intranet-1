@@ -8,7 +8,8 @@ import Profile from '../../models/profile'
 
 @Component({
     selector: 'profile-single',
-    templateUrl: 'profile-single.component.html'
+    templateUrl: 'profile-single.component.html',
+    styleUrls: ['./profile.component.css']
 })
 
 export class ProfileSingleComponent implements OnInit {
@@ -27,6 +28,7 @@ export class ProfileSingleComponent implements OnInit {
     profiles: IProfile[]
     selectedProfile: IProfile
 
+    isIn = false
 
     constructor(private dataService: DataService,
                 private route: ActivatedRoute,
@@ -38,9 +40,13 @@ export class ProfileSingleComponent implements OnInit {
         this.location.back()
     }
 
-    ngOnInit() {
-        this.id = 1 //+this.route.snapshot.params['id']
+    toggleState() {
+        const bool = this.isIn
+        this.isIn = bool === false ? true : false
+    }
 
+    ngOnInit() {
+        this.id = 1 // +this.route.snapshot.params['id']
         this.dataService.getProfile(this.id).subscribe((profile: IProfile) => {
             this.firstName = profile.firstName
             this.lastName = profile.lastName

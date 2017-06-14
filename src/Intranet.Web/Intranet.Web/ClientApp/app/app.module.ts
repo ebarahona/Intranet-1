@@ -3,6 +3,10 @@ import { RouterModule, Routes } from '@angular/router'
 import { HttpModule } from '@angular/http'
 import { FormsModule } from '@angular/forms'
 
+
+import { TruncatePipe }   from './shared/pipes/truncate'
+import { SafeHtmlPipe } from './shared/pipes/safehtml'
+
 // Imports for loading & configuring the in-memory web api
 
 import { AppComponent } from './components/app/app.component'
@@ -23,11 +27,12 @@ import { ProfileNewComponent } from './components/profile/profile-new.component'
 import { ProfileEditComponent } from './components/profile/profile-edit.component'
 import { ProfileSingleComponent } from './components/profile/profile-single.component'
 
+import { TextEditorComponent } from './components/texteditor/texteditor.component'
+
 // Services
 import { DataService } from './shared/data_services/data.service'
 import { ConfigService } from './shared/api_settings/config.service'
 import { TokenService } from './shared/data_services/jwt-token.service'
-
 
 export const sharedConfig: NgModule = {
     bootstrap: [ AppComponent ],
@@ -39,7 +44,10 @@ export const sharedConfig: NgModule = {
         HomeComponent,
         NewsComponent, NewsNewComponent, NewsDetailComponent, NewsEditComponent,
         ProfilesComponent, ProfileDetailComponent, ProfileNewComponent, ProfileEditComponent,
-        ProfileChecklistComponent, ProfileSingleComponent
+        ProfileChecklistComponent, ProfileSingleComponent,
+        TruncatePipe,
+        TextEditorComponent,
+        SafeHtmlPipe,
     ],
     providers: [
         DataService,
