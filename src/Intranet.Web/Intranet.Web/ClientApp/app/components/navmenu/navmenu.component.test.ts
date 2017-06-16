@@ -22,7 +22,7 @@ describe('NavMenu component', () => {
             })
     })
 
-    it('should have an "Is In" variable that starts as "false"', () => {
+    it('should have an "IsIn" variable that starts as "false"', () => {
         const IsIn = component.isIn
         expect(IsIn).toBe(false)
     })
