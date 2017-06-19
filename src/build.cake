@@ -1,4 +1,7 @@
-﻿//////////////////////////////////////////////////////////////////////
+﻿#addin "NuGet.Core"
+#addin "Cake.ExtendedNuGet"
+
+//////////////////////////////////////////////////////////////////////
 // ARGUMENTS
 //////////////////////////////////////////////////////////////////////
 #addin nuget:https://www.myget.org/f/righthand-test/?package=Cake.Docker
@@ -17,7 +20,6 @@ var configuration =
 // Define directories.
 var apiDir = Directory("./Intranet.API/Intranet.API");
 var apiTestsDir = Directory("./Intranet.API/Intranet.API.UnitTests");
-
 var webDir = Directory("./Intranet.Web/Intranet.Web");
 var webTestsDir = Directory("./Intranet.Web/Intranet.Web.UnitTests");
 var e2eTestsDir = Directory("./Intranet.SeleniumTests");
@@ -64,8 +66,31 @@ Task("API:Restore-NuGet-Packages")
     .IsDependentOn("API:Clean")
     .Does(() =>
 {
+      // TODO: This should live in it's own NuGet.config but that won't work at the moment:
+      //       See https://github.com/NuGet/Home/issues/4907
+      var imageSharpSource = "https://www.myget.org/F/imagesharp/api/v3/index.json";
+      var tempCachePath = MakeAbsolute(Directory("temp-nuget-cache"));
+
+      if (!NuGetHasSource(imageSharpSource))
+      {
+        NuGetAddSource(
+            name: "ImageSharp Nightly",
+            source: imageSharpSource
+        );
+      }
+
+      NuGetInstall("ImageSharp", new NuGetInstallSettings {
+        OutputDirectory = tempCachePath,
+        // Prerelease = true,
+        Version = "1.0.0-alpha9-00139",
+        Source = new string[] { imageSharpSource, "https://api.nuget.org/v3/index.json" }
+      });
+
       DotNetCoreRestore(apiDir);
       DotNetCoreRestore(apiTestsDir);
+
+      CleanDirectory(tempCachePath);
+      DeleteDirectory(tempCachePath);
 });
 
 Task("Web:Restore-NuGet-Packages")
@@ -151,7 +176,6 @@ Task("Web:Run")
     ...
 });
 
-
 Task("E2E:Run-End2End-Tests")
     .IsDependentOn("E2E:Build")
     .Does(() =>
@@ -175,9 +199,10 @@ Task("E2E:Run-End2End-Tests")
 // TASK TARGETS
 //////////////////////////////////////////////////////////////////////
 
-Task("Default").IsDependentOn("All:DockerRun");
+Task("Default")
     .IsDependentOn("API:Build")
-    .IsDependentOn("Web:Build");
+    .IsDependentOn("Web:Build")
+    .IsDependentOn("All:DockerRun")
     .IsDependentOn("E2E:Run-End2End-Tests");
 //    .IsDependentOn("Web.TearDown")
 //    .IsDependentOn("API.TearDown")
