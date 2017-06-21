@@ -17,6 +17,8 @@ declare const tinymce: any
     styleUrls: ['./texteditor.component.css']
 })
 export class TextEditorComponent implements AfterViewInit, OnDestroy {
+    _content: string
+
     ClientSide: boolean
     TinyMCELoaded: boolean
     Editor: any
@@ -24,8 +26,29 @@ export class TextEditorComponent implements AfterViewInit, OnDestroy {
     ApiUrl: string
     BaseUrl: string
 
+    set Content(newValue) {
+        this._content = newValue
+    }
+    get Content() {
+        const parser = new DOMParser()
+        const document = parser.parseFromString(this._content, 'text/html')
+
+        const imgs: any = document.getElementsByTagName('img')
+            console.log(imgs)
+
+        for (const img of imgs) {
+            // Make img-tags responsive here
+            //img.src = "https://i.redd.it/nrh43dai3hfy.jpg"
+        }
+
+        const inner = document.getElementsByTagName('body')[0].innerHTML
+        console.log(inner)
+        return inner
+    }
+
     @Input() elementId: string
     @Input() text: string
+
     @Output() onSubmit = new EventEmitter<string>()
     @Output() onEditorContentChange = new EventEmitter<string>()
 
@@ -38,8 +61,8 @@ export class TextEditorComponent implements AfterViewInit, OnDestroy {
 
     handleSubmit() {
         this.Saved = true
-        const content = this.Editor.getContent()
-        this.onSubmit.emit(content)
+        this.Content = this.Editor.getContent()
+        this.onSubmit.emit(this.Content)
     }
 
     ngAfterViewInit() {
@@ -56,14 +79,15 @@ export class TextEditorComponent implements AfterViewInit, OnDestroy {
                 require('tinymce/plugins/imagetools')
                 require('tinymce/plugins/save')
                 require('tinymce/plugins/wordcount')
+                require('tinymce/plugins/preview')
 
                 this.TinyMCELoaded = true
 
                 tinymce.init({
                     selector: '#' + this.elementId,
                     height: 250,
-                    plugins: [ 'link', 'table', 'lists', 'image', 'imagetools', 'save', 'wordcount' ],
-                    toolbar: 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | save media | codesample help',
+                    plugins: [ 'link', 'table', 'lists', 'image', 'imagetools', 'save', 'wordcount', 'preview' ],
+                    toolbar: 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | save media | codesample | preview help',
                     menubar: false,
                     images_upload_url: this.ApiUrl + '/upload',
                     images_upload_base_path: this.BaseUrl,
@@ -108,11 +132,11 @@ export class TextEditorComponent implements AfterViewInit, OnDestroy {
                     setup: editor => {
                         this.Editor = editor
                         editor.on('keyup change undo redo', () => {
-                            const content = editor.getContent()
+                            this.Content = editor.getContent()
                             this.Saved = false
-                            this.onEditorContentChange.emit(content)
+                            this.onEditorContentChange.emit(this.Content)
                         })
-                    }
+                    },
                 })
             })
         }
