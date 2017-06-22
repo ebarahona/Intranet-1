@@ -34,16 +34,13 @@ export class TextEditorComponent implements AfterViewInit, OnDestroy {
         const document = parser.parseFromString(this._content, 'text/html')
 
         const imgs: any = document.getElementsByTagName('img')
-            console.log(imgs)
 
         for (const img of imgs) {
             // Make img-tags responsive here
             // img.src = "https://i.redd.it/nrh43dai3hfy.jpg"
         }
 
-        const inner = document.getElementsByTagName('body')[0].innerHTML
-        console.log(inner)
-        return inner
+        return document.getElementsByTagName('body')[0].innerHTML
     }
 
     @Input() elementId: string
