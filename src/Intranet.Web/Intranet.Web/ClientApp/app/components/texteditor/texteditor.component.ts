@@ -38,7 +38,7 @@ export class TextEditorComponent implements AfterViewInit, OnDestroy {
 
         for (const img of imgs) {
             // Make img-tags responsive here
-            //img.src = "https://i.redd.it/nrh43dai3hfy.jpg"
+            // img.src = "https://i.redd.it/nrh43dai3hfy.jpg"
         }
 
         const inner = document.getElementsByTagName('body')[0].innerHTML
