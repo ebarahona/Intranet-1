@@ -58,6 +58,22 @@ namespace Intranet.API.Domain.Data
                 .HasForeignKey(nk => nk.KeywordId);
             #endregion
 
+            #region Faq
+            modelBuilder.Entity<Faq>()
+                .HasIndex(f => f.Url)
+                .IsUnique();
+            #endregion
+
+            #region Category
+            modelBuilder.Entity<Category>()
+                .HasIndex(c => c.Url)
+                .IsUnique();
+
+            modelBuilder.Entity<Category>()
+                .HasIndex(c => c.Title)
+                .IsUnique();
+            #endregion
+
             base.OnModelCreating(modelBuilder);
         }
 
@@ -65,5 +81,7 @@ namespace Intranet.API.Domain.Data
         public virtual DbSet<Keyword> Keywords { get; set; }
         public virtual DbSet<Image> Images { get; set; }
         public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<Faq> Faqs { get; set; }
+        public virtual DbSet<Category> Categories { get; set; }
     }
 }
