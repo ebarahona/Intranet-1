@@ -262,7 +262,7 @@ namespace Intranet.API.UnitTests.Controllers
             var oldNewsItem = GetFakeNews().First();
             var newNewsItem = GetFakeNews().First();
             var dateTimeFactory = new DateTimeFactory();
-            var user = new ClaimsPrincipalFake(new Claim("role", "admin"));
+            var user = new ClaimsPrincipalFake(new Claim(ClaimTypes.Role, "Admin"));
 
             newNewsItem.UserId = "anne.the.admin";
 
@@ -354,7 +354,7 @@ namespace Intranet.API.UnitTests.Controllers
         {
             // Assign
             var news = GetFakeNews().First();
-            var user = new ClaimsPrincipalFake(new Claim("role", "admin"));
+            var user = new ClaimsPrincipalFake(new Claim(ClaimTypes.Role, "Admin"));
             var dateTimeFactory = new DateTimeFactory();
 
             DbContextFake.SeedDb<IntranetApiContext>(c => c.News.AddRange(news), ensureDeleted: true);
