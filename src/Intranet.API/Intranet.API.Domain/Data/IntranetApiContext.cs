@@ -54,7 +54,7 @@ namespace Intranet.API.Domain.Data
 
             modelBuilder.Entity<NewsKeyword>()
                 .HasOne(nk => nk.Keyword)
-                .WithMany(k => k.NewsKeyword)
+                .WithMany(k => k.NewsKeywords)
                 .HasForeignKey(nk => nk.KeywordId);
             #endregion
 
@@ -64,6 +64,21 @@ namespace Intranet.API.Domain.Data
                 .IsUnique();
             #endregion
 
+            #region FaqKeyword
+            modelBuilder.Entity<FaqKeyword>()
+                .HasKey(k => new { k.FaqId, k.KeywordId });
+
+            modelBuilder.Entity<FaqKeyword>()
+                .HasOne(fk => fk.Faq)
+                .WithMany(f => f.FaqKeywords)
+                .HasForeignKey(fk => fk.FaqId);
+
+            modelBuilder.Entity<FaqKeyword>()
+                .HasOne(fk => fk.Keyword)
+                .WithMany(k => k.FaqKeywords)
+                .HasForeignKey(fk => fk.KeywordId);
+            #endregion
+
             #region Category
             modelBuilder.Entity<Category>()
                 .HasIndex(c => c.Url)
@@ -71,6 +86,16 @@ namespace Intranet.API.Domain.Data
 
             modelBuilder.Entity<Category>()
                 .HasIndex(c => c.Title)
+                .IsUnique();
+            #endregion
+
+            #region Keyword
+            modelBuilder.Entity<Keyword>()
+                .HasIndex(k => k.Url)
+                .IsUnique();
+
+            modelBuilder.Entity<Keyword>()
+                .HasIndex(k => k.Name)
                 .IsUnique();
             #endregion
 

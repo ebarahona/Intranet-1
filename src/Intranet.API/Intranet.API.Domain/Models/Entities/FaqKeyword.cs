@@ -6,20 +6,20 @@ using System.Text;
 
 namespace Intranet.API.Domain.Models.Entities
 {
-    public class NewsKeyword : KeywordRelation, IKeywordRelation
+    public class FaqKeyword : KeywordRelation, IKeywordRelation
     {
-        public NewsKeyword()
+        public FaqKeyword()
         {
             // Empty
         }
 
-        public NewsKeyword(Keyword keyword)
+        public FaqKeyword(Keyword keyword)
             : base(keyword)
         {
-
+            // Empty
         }
 
-        public int NewsId { get; set; }
-        public News News { get; set; }
+        public int FaqId { get; set; }
+        public Faq Faq { get; set; }
     }
 }
