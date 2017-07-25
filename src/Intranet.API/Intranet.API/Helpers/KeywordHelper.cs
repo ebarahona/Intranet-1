@@ -39,7 +39,8 @@ namespace Intranet.API.Helpers
 
             // Get all keyword entities that already is created
             var exisitingKeywordEntities = allKeywordEntities?
-                .Where(k => keywords.Contains(k.Name, StringComparer.OrdinalIgnoreCase));
+                .Where(k => keywords.Contains(k.Name, StringComparer.OrdinalIgnoreCase))
+                ?? new List<Keyword>();
 
             // Get a list of all keywords that is already attached to the entity to avoid duplicates etc
             var alreadyAttachedKeywordEntities = exisitingKeywordEntities?
@@ -49,13 +50,13 @@ namespace Intranet.API.Helpers
                 );
 
             // Get all joining tables, ie NewsKeyword, that is already attached
-            var alreadyAttachedJoiningKeywordEntities = exisitingKeywordEntities
+            var alreadyAttachedJoiningKeywordEntities = exisitingKeywordEntities?
                 .SelectMany(k => GetJoiningCollectionInternal<TRelation>(k, nameOfJoiningProperty))?
-                .Where(jt => GetEntityInternal<TEntity>(jt, nameOfEntity).Id == entity.Id);
+                .Where(jt => GetEntityInternal<TEntity>(jt, nameOfEntity).Id == entity.Id) ?? new List<TRelation>();
 
             // Get all existing keywords as strings compare them to the param to avoid creating them again
-            var existingKeywords = exisitingKeywordEntities
-                .Select(k => k.Name);
+            var existingKeywords = exisitingKeywordEntities?
+                .Select(k => k.Name) ?? new List<string>();
 
             // Finally we have a list of all keywords we have to create
             var newKeywords = keywords?.Except(existingKeywords);
@@ -69,7 +70,7 @@ namespace Intranet.API.Helpers
                 });
 
             // Get a list of all keyword entities that have be attached to the entity
-            var allKeywordEntitiesToBeAttached = exisitingKeywordEntities?
+            var allKeywordEntitiesToBeAttached = exisitingKeywordEntities
                 .Except(alreadyAttachedKeywordEntities)
                 .Concat(newKeywordEntities ?? new List<Keyword>());
 
@@ -112,7 +113,7 @@ namespace Intranet.API.Helpers
         private static ICollection<TRelation> GetJoiningCollectionInternal<TRelation>(Keyword entity, string collection)
             where TRelation : class, IKeywordRelation
         {
-            return entity.GetType().GetProperty(collection).GetValue(entity) as ICollection<TRelation>;
+            return entity.GetType().GetProperty(collection).GetValue(entity) as ICollection<TRelation> ?? new List<TRelation>();
         }
     }
 }
