@@ -23,7 +23,7 @@ namespace Intranet.API.Controllers
     /// </summary>
     [Produces("application/json")]
     [Route("/api/v1/[controller]")]
-    public class FaqController : Controller, IRestControllerAsync<Faq>
+    public class FaqController : Controller, IRestControllerAsync<FaqViewModel>
     {
         private readonly IntranetApiContext _context;
 
@@ -32,6 +32,7 @@ namespace Intranet.API.Controllers
             _context = context;
         }
 
+        #region DELETE
         [Authorize("IsAdmin")]
         [HttpDelete]
         [Route("{id:int}")]
@@ -65,7 +66,9 @@ namespace Intranet.API.Controllers
                 return BadRequest();
             }
         }
+        #endregion
 
+        #region GET
         [HttpGet]
         public async Task<IActionResult> GetAsync()
         {
@@ -73,15 +76,15 @@ namespace Intranet.API.Controllers
             {
                 var faqs = await _context.Faqs
                     .Include(f => f.Category)
-                        .ThenInclude(c => c.Faqs)
+                    .Include(f => f.FaqKeywords)
+                        .ThenInclude(fk => fk.Keyword)
                     .ToListAsync();
 
-                if (faqs.IsNull())
-                {
-                    faqs = new List<Faq>();
-                }
+                var faqViewModels = faqs?
+                    .Select(f => new FaqViewModel(f))
+                    .ToList() ?? new List<FaqViewModel>();
 
-                return Ok(faqs);
+                return Ok(faqViewModels);
             }
             catch (Exception)
             {
@@ -97,7 +100,8 @@ namespace Intranet.API.Controllers
             {
                 var faq = await _context.Faqs
                     .Include(f => f.Category)
-                        .ThenInclude(c => c.Faqs)
+                    .Include(f => f.FaqKeywords)
+                        .ThenInclude(fk => fk.Keyword)
                     .SingleOrDefaultAsync(c => c.Id == id);
 
                 if (faq.IsNull())
@@ -105,49 +109,67 @@ namespace Intranet.API.Controllers
                     return NotFound();
                 }
 
-                return Ok(faq);
+                return Ok(new FaqViewModel(faq));
             }
             catch (Exception)
             {
                 return BadRequest();
             }
         }
+        #endregion
 
+        #region POST
         [Authorize("IsAdmin")]
         [HttpPost]
-        public async Task<IActionResult> PostAsync([FromBody] Faq faq)
+        public async Task<IActionResult> PostAsync([FromBody] FaqViewModel faqVM)
         {
             try
             {
-                var category = await _context.Categories.SingleOrDefaultAsync(c => c.Title.Equals(faq.Category.Title, StringComparison.OrdinalIgnoreCase));
+                var category = await _context.Categories.SingleOrDefaultAsync(c => c.Title.Equals(faqVM.Category.Title, StringComparison.OrdinalIgnoreCase));
 
                 if (category.IsNotNull())
                 {
-                    faq.Category = category;
+                    faqVM.Category = category;
                 }
                 else
                 {
-                    faq.Category.Url = UrlHelper.URLFriendly(faq.Category.Title);
+                    faqVM.Category = new Category
+                    {
+                        Title = faqVM.Category.Title,
+                        Url = UrlHelper.URLFriendly(faqVM.Category.Title),
+                    };
                 }
 
-                faq.Url = UrlHelper.URLFriendly(faq.Question);
+                var faq = new Faq
+                {
+                    Answer = faqVM.Answer,
+                    Category = faqVM.Category,
+                    Question = faqVM.Question,
+                    Url = UrlHelper.URLFriendly(faqVM.Question),
+                };
+
+                var keywords = KeywordHelper.GetKeywordsFromString(faqVM.Keywords);
+                var allKeywordEntities = GetAllKeywordEntitiesInternal(faqVM, keywords);
+                KeywordHelper.SetKeywords<Faq, FaqKeyword>(keywords, faq, allKeywordEntities);
 
                 await _context.AddAsync(faq);
 
                 await _context.SaveChangesAsync();
 
-                return Ok(faq);
+                return Ok(new FaqViewModel(faq));
             }
             catch (Exception)
             {
                 return BadRequest();
             }
         }
+        #endregion
 
+        #region PUT
         [Authorize("IsAdmin")]
         [HttpPut]
         [Route("{id:int}")]
-        public async Task<IActionResult> PutAsync(int id, [FromBody] Faq faq)
+        public async Task<IActionResult> PutAsync(int id, [FromBody] FaqViewModel faqVM)
         {
             try
             {
@@ -160,9 +182,9 @@ namespace Intranet.API.Controllers
                     return NotFound();
                 }
 
-                if (!entity.Category.Title.Equals(faq.Category.Title, StringComparison.OrdinalIgnoreCase))
+                if (!entity.Category.Title.Equals(faqVM.Category.Title, StringComparison.OrdinalIgnoreCase))
                 {
-                    var category = await _context.Categories.SingleOrDefaultAsync(c => c.Title.Equals(faq.Category.Title, StringComparison.OrdinalIgnoreCase));
+                    var category = await _context.Categories.SingleOrDefaultAsync(c => c.Title.Equals(faqVM.Category.Title, StringComparison.OrdinalIgnoreCase));
 
                     if (category.IsNotNull())
                     {
@@ -172,23 +194,39 @@ namespace Intranet.API.Controllers
                     {
                         entity.Category = new Category
                         {
-                            Title = faq.Category.Title,
-                            Url = UrlHelper.URLFriendly(faq.Category.Title),
+                            Title = faqVM.Category.Title,
+                            Url = UrlHelper.URLFriendly(faqVM.Category.Title),
                         };
                     }
                 }
 
-                entity.Answer = faq.Answer;
-                entity.Question = faq.Question;
+                entity.Answer = faqVM.Answer;
+                entity.Question = faqVM.Question;
+
+                var keywords = KeywordHelper.GetKeywordsFromString(faqVM.Keywords);
+                var allKeywordEntities = GetAllKeywordEntitiesInternal(faqVM, keywords);
+                KeywordHelper.SetKeywords<Faq, FaqKeyword>(keywords, entity, allKeywordEntities);
 
                 await _context.SaveChangesAsync();
 
-                return Ok(entity);
+                return Ok(new FaqViewModel(entity));
             }
             catch (Exception)
             {
                 return BadRequest();
             }
         }
+        #endregion
+
+        #region Private Helpers
+        private List<Keyword> GetAllKeywordEntitiesInternal(FaqViewModel faq, IEnumerable<string> keywords)
+        {
+            return _context.Keywords?
+            .Include(k => k.FaqKeywords)
+                .ThenInclude(fk => fk.Faq)?
+            .Where(k => keywords.Contains(k.Name, StringComparer.OrdinalIgnoreCase) || k.FaqKeywords.Any(nk => nk.FaqId.Equals(faq.Id)))
+            .ToList();
+        }
+        #endregion
     }
 }

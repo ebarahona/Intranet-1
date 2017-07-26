@@ -8,28 +8,23 @@ using System.Threading.Tasks;
 
 namespace Intranet.API.ViewModels
 {
-    public class NewsViewModel : News
+    public class FaqViewModel : Faq
     {
         private string _keywords;
 
-        public NewsViewModel()
+        public FaqViewModel()
         {
             // Empty, for model binding
         }
 
-        public NewsViewModel(News news)
+        public FaqViewModel(Faq faq)
         {
-            Created = news.Created;
-            HeaderImage = news.HeaderImage;
-            Id = news.Id;
-            NewsKeywords = news.NewsKeywords;
-            Published = news.Published;
-            Text = news.Text;
-            Title = news.Title;
-            Updated = news.Updated;
-            User = news.User;
-            UserId = news.UserId;
-            Url = news.Url;
+            Answer = faq.Answer;
+            Category = faq.Category;
+            FaqKeywords = faq.FaqKeywords;
+            Id = faq.Id;
+            Question = faq.Question;
+            Url = faq.Url;
         }
 
         /// <summary>
@@ -41,9 +36,9 @@ namespace Intranet.API.ViewModels
             {
                 if (_keywords.IsNull())
                 {
-                    return this.NewsKeywords.IsNull()
+                    return this.FaqKeywords.IsNull()
                         ? null
-                        : String.Join(",", this.NewsKeywords.Select(k => k.Keyword?.Name)?.Where(k => !String.IsNullOrWhiteSpace(k)));
+                        : String.Join(",", this.FaqKeywords.Select(k => k.Keyword?.Name)?.Where(k => !String.IsNullOrWhiteSpace(k)));
                 }
 
                 return _keywords;

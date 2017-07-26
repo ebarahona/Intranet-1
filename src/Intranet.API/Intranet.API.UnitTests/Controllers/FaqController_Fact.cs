@@ -3,6 +3,7 @@ using Intranet.API.Domain.Data;
 using Intranet.API.Domain.Models.Entities;
 using Intranet.API.UnitTests.Fakes;
 using Intranet.API.UnitTests.TestHelpers;
+using Intranet.API.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -122,7 +123,7 @@ namespace Intranet.API.UnitTests.Controllers
         public async Task Post_Should_Return_OkResult()
         {
             // Assign
-            var faq = new Faq
+            var faq = new FaqViewModel
             {
                 Question = "q",
                 Answer = "",
@@ -188,7 +189,7 @@ namespace Intranet.API.UnitTests.Controllers
                 },
             };
 
-            var newFaq = new Faq
+            var newFaq = new FaqViewModel
             {
                 Question = "q",
                 Answer = "",
