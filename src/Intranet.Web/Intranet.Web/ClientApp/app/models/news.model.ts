@@ -1,6 +1,7 @@
 ﻿import { Image, User} from './'
+import { HasId } from '../contracts'
 
-export class News {
+export class News implements HasId {
     id: number | null
     title: string
     text: string

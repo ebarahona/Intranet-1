@@ -11,10 +11,16 @@ import { SafeHtmlPipe, TruncatePipe }   from './_pipes'
 import { AppComponent } from './components/app/app.component'
 import { NavMenuComponent } from './components/navmenu/navmenu.component'
 
-import { NewsComponent } from './components/news/news.component'
-import { NewsNewComponent } from './components/news/news-new.component'
-import { NewsDetailComponent } from './components/news/news-detail.component'
-import { NewsEditComponent } from './components/news/news-edit.component'
+import {
+  NewsComponent,
+  NewsDetailComponent,
+  NewsEditComponent,
+  NewsNewComponent,
+} from './components/news'
+
+import {
+  FaqComponent
+} from './components/faq'
 
 import {
   DeleteNewsButtonComponent,
@@ -23,12 +29,12 @@ import {
   NewsKeywordsStripComponent,
 } from './_directives'
 
-import { ProfilesComponent } from './components/profile/profiles.component'
-import { ProfileDetailComponent } from './components/profile/profile-detail.component'
-import { ProfileChecklistComponent } from './components/profile/profile-checklist.component'
-import { ProfileNewComponent } from './components/profile/profile-new.component'
-import { ProfileEditComponent } from './components/profile/profile-edit.component'
-import { ProfileSingleComponent } from './components/profile/profile-single.component'
+// import { ProfilesComponent } from './components/profile/profiles.component'
+// import { ProfileDetailComponent } from './components/profile/profile-detail.component'
+// import { ProfileChecklistComponent } from './components/profile/profile-checklist.component'
+// import { ProfileNewComponent } from './components/profile/profile-new.component'
+// import { ProfileEditComponent } from './components/profile/profile-edit.component'
+// import { ProfileSingleComponent } from './components/profile/profile-single.component'
 
 import { TextEditorComponent } from './components/texteditor/texteditor.component'
 
@@ -36,7 +42,8 @@ import { TextEditorComponent } from './components/texteditor/texteditor.componen
 import {
   AuthenticationService,
   ConfigService,
-  DataService,
+  NewsService,
+  FaqService,
   SecureHttpService,
 } from './_services'
 
@@ -48,8 +55,8 @@ export const sharedConfig: NgModule = {
         AppComponent,
         NavMenuComponent,
         NewsComponent, NewsNewComponent, NewsDetailComponent, NewsEditComponent,
-        ProfilesComponent, ProfileDetailComponent, ProfileNewComponent, ProfileEditComponent,
-        ProfileChecklistComponent, ProfileSingleComponent,
+        // ProfilesComponent, ProfileDetailComponent, ProfileNewComponent, ProfileEditComponent,
+        // ProfileChecklistComponent, ProfileSingleComponent,
         TruncatePipe,
         TextEditorComponent,
         SafeHtmlPipe,
@@ -57,9 +64,11 @@ export const sharedConfig: NgModule = {
         NewsInfoStripComponent,
         TogglePublishedComponent,
         NewsKeywordsStripComponent,
+        FaqComponent,
     ],
     providers: [
-        DataService,
+        NewsService,
+        FaqService,
         ConfigService,
         AuthenticationService,
         { provide: APP_BASE_HREF, useValue: '/' },
@@ -73,12 +82,13 @@ export const sharedConfig: NgModule = {
             { path: 'news/:year/:month/:day/:url', component: NewsDetailComponent },
             { path: 'news-new', component: NewsNewComponent },
             { path: 'news-edit/:id', component: NewsEditComponent },
-            { path: 'checklist', component: ProfileChecklistComponent },
-            { path: 'profiles', component: ProfilesComponent },
-            { path: 'profile-single', component: ProfileSingleComponent },
-            { path: 'profile-new', component: ProfileNewComponent },
-            { path: 'profile-detail/:id', component: ProfileDetailComponent },
-            { path: 'profile-edit/:id', component: ProfileEditComponent },
+            { path: 'faq', component: FaqComponent },
+            // { path: 'checklist', component: ProfileChecklistComponent },
+            // { path: 'profiles', component: ProfilesComponent },
+            // { path: 'profile-single', component: ProfileSingleComponent },
+            // { path: 'profile-new', component: ProfileNewComponent },
+            // { path: 'profile-detail/:id', component: ProfileDetailComponent },
+            // { path: 'profile-edit/:id', component: ProfileEditComponent },
             { path: '**', redirectTo: 'home' }
         ])
     ]
