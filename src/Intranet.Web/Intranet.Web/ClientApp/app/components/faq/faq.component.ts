@@ -26,7 +26,6 @@ export class FaqComponent implements OnInit {
   updateData() {
     this.faqService.getItems().subscribe(
         faqs => {
-          console.log(faqs)
           this.faqs = faqs
         }
       )
