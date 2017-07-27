@@ -40,12 +40,13 @@ export abstract class RestService<T extends HasId> {
       .catch(this.handleError)
   }
 
-  postItem(item: T): Promise<T> {
+  postItem(item: T): Observable<T> {
     const body = JSON.stringify(item)
 
     return this.http.post(this.url, body)
-      .toPromise()
-      .then(res => res.json().data as T)
+      .map((res: Response) => {
+        return res.json() as T
+      })
   }
 
   putItem(item: T): Observable<T> {

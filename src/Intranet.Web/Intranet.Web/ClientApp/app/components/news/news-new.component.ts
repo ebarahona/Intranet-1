@@ -63,7 +63,7 @@ export class NewsNewComponent {
 
         this.newsItem['userId'] = jwt.displayName
 
-        this.newsService.postItem(this.newsItem).then(
+        this.newsService.postItem(this.newsItem).subscribe(
             newsitem => {
                 this.success = successMessage
                 this.error = null
