@@ -26,7 +26,7 @@ import {
   DeleteNewsButtonComponent,
   NewsInfoStripComponent,
   TogglePublishedComponent,
-  NewsKeywordsStripComponent,
+  KeywordsStripComponent,
 } from './_directives'
 
 // import { ProfilesComponent } from './components/profile/profiles.component'
@@ -63,7 +63,7 @@ export const sharedConfig: NgModule = {
         DeleteNewsButtonComponent,
         NewsInfoStripComponent,
         TogglePublishedComponent,
-        NewsKeywordsStripComponent,
+        KeywordsStripComponent,
         FaqComponent,
     ],
     providers: [
