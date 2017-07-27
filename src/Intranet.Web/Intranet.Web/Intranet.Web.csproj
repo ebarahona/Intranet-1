@@ -30,16 +30,12 @@
   <ItemGroup>
     <!-- Files not to show in IDE -->
     <None Remove="yarn.lock" />
-    <Compile Remove="wwwroot\assets\NewFolder\**" />
 
     <!-- Files not to publish (note that the 'dist' subfolders are re-added below) -->
     <Content Remove="ClientApp\**" />
-    <Content Remove="wwwroot\assets\NewFolder\**" />
-    <EmbeddedResource Remove="wwwroot\assets\NewFolder\**" />
-    <None Remove="wwwroot\assets\NewFolder\**" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="wwwroot\assets\css\login.css" />
+    <Content Include="wwwroot\assets\css\**" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Intranet.Shared\Intranet.Shared.Common\Intranet.Shared.Common.csproj" />
