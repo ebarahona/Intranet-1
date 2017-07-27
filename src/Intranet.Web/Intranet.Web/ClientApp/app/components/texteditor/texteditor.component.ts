@@ -24,15 +24,20 @@ export class TextEditorComponent implements AfterViewInit, OnDestroy {
 
     @Input() elementId: string
     @Input() text: string
+    @Input() inline: boolean
+    @Input() height: number
     @Output() onSubmit = new EventEmitter<string>()
     @Output() onEditorContentChange = new EventEmitter<string>()
+    @Output() isSaved = new EventEmitter<boolean>()
 
     constructor(private configService: ConfigService) {
         this.ClientSide = typeof window !== 'undefined'
+        this.isSaved.emit(true)
         this.Saved = true
     }
 
     handleSubmit() {
+        this.isSaved.emit(true)
         this.Saved = true
         const content = this.Editor.getContent()
         this.onSubmit.emit(content)
@@ -40,6 +45,7 @@ export class TextEditorComponent implements AfterViewInit, OnDestroy {
 
     ngAfterViewInit() {
         if (this.ClientSide) {
+          console.log(this.text)
             require.ensure([
                 'tinymce'
             ], require => {
@@ -56,7 +62,8 @@ export class TextEditorComponent implements AfterViewInit, OnDestroy {
 
                 tinymce.init({
                     selector: '#' + this.elementId,
-                    height: 250,
+                    height: this.height || 250,
+                    inline: this.inline,
                     plugins: [ 'link', 'table', 'lists', 'image', 'imagetools', 'wordcount' ],
                     toolbar: 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | media | codesample help',
                     menubar: false,
@@ -103,6 +110,7 @@ export class TextEditorComponent implements AfterViewInit, OnDestroy {
                         this.Editor = editor
                         editor.on('keyup change undo redo', () => {
                             const content = editor.getContent()
+                            this.isSaved.emit(false)
                             this.Saved = false
                             this.onEditorContentChange.emit(content)
                         })
