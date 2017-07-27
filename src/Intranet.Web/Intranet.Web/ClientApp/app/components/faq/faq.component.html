@@ -1,5 +1,13 @@
 ﻿<div class="container-fluid">
   <h1>FAQ</h1>
+  <!-- START: Flash messages  -->
+  <div *ngIf="!saved.faqId && saved.success" class="alert alert-success">
+    <strong>Success!</strong> {{saved.success}}
+  </div>
+  <div *ngIf="!saved.faqId && saved.error" class="alert alert-danger">
+    <strong>Error!</strong> {{saved.error}}
+  </div>
+  <!-- END: Flash messages  -->
   <div *ngFor="let faqByCategory of faqByCategories">
     <h2 id="{{faqByCategory.category.url}}">
       <span *ngIf="!isAdmin && faqByCategory && faqByCategory.category.title">
@@ -38,12 +46,20 @@
             [text]="faq.question"
             (onEditorContentChange)="onQuestionChange($event, faq)"
           ></text-editor>
-          <span
+          <div class="pull-right">
+            <span
             *ngIf="isAdmin"
             (click)="isAdmin && save(faq)"
-            class="glyphicon glyphicon-floppy-disk pull-right"
+            class="glyphicon glyphicon-floppy-disk"
             aria-hidden="true"
           ></span>
+          <span
+            *ngIf="isAdmin"
+            (click)="isAdmin && delete(faq)"
+            class="glyphicon glyphicon-trash"
+            aria-hidden="true"
+          ></span>
+          </div>
         </h4>
         <div [ngClass]="{ 'collapsed': !isOpen(faq.id) && faq.id }" class="collapsible">
           <p *ngIf="!isAdmin && faq.answer" class="list-group-item-text">{{faq.answer}}</p>
@@ -67,12 +83,14 @@
             (onEditorContentChange)="onKeywordsChange($event, faq)"
           ></keywords-strip>
         </div>
+        <!-- START: Flash messages inside FAQ  -->
         <div *ngIf="faq.id === saved.faqId && saved.success" class="alert alert-success">
           <strong>Success!</strong> {{saved.success}}
         </div>
         <div *ngIf="faq.id === saved.faqId && saved.error" class="alert alert-danger">
           <strong>Error!</strong> {{saved.error}}
         </div>
+        <!-- END: Flash messages inside FAQ  -->
       </a>
     </div>
   </div>

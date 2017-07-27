@@ -122,4 +122,19 @@ export class FaqComponent implements OnInit {
       }
     )
   }
+
+  async delete(faq: Faq) {
+    await this.faqService.deleteItem(faq.id).subscribe(
+      (data) => {
+        this.saved.faqId = faq.id
+        this.saved.success = 'Deleted successfully!'
+        this.saved.error = null
+      },
+      error => {
+        this.saved.faqId = faq.id
+        this.saved.success = null
+        this.saved.error = error
+      }
+    )
+  }
 }
