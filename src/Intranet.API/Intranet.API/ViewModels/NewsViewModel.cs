@@ -54,5 +54,8 @@ namespace Intranet.API.ViewModels
                 _keywords = value;
             }
         }
+
+        // Workaround to not get an excetion due to the required attribute
+        public new string Url { get; set; }
     }
 }
