@@ -20,7 +20,9 @@ export class NewsEditComponent implements OnInit {
       private newsService: NewsService,
       private route: ActivatedRoute,
       private location: Location
-    ) { }
+    ) {
+      this.newsItem = new News()
+    }
 
     onEditorContentChange(content: string) {
         this.newsItem.text = content
