@@ -18,14 +18,14 @@
         *ngFor="let faq of faqByCategory.faqs"
         id="{{faq.url}}"
         href="#"
-        (click)="!isAdmin && toggle(faq.id)"
+        (click)="!isAdmin && faq.id && toggle(faq.id)"
         class="list-group-item"
       >
         <h4 class="list-group-item-heading">
           <span
-            (click)="isAdmin && toggle(faq.id)"
+            (click)="isAdmin && faq.id && toggle(faq.id)"
             class="glyphicon"
-            [ngClass]="{ 'glyphicon-minus': isOpen(faq.id), 'glyphicon-plus': !isOpen(faq.id) }"
+            [ngClass]="{ 'glyphicon-minus': isOpen(faq.id) || !faq.id, 'glyphicon-plus': !isOpen(faq.id) }"
             aria-hidden="true"
           ></span>&nbsp;
           <span *ngIf="!isAdmin && faq.question">
@@ -45,7 +45,7 @@
             aria-hidden="true"
           ></span>
         </h4>
-        <div [ngClass]="{ 'collapsed': !isOpen(faq.id) }" class="collapsible">
+        <div [ngClass]="{ 'collapsed': !isOpen(faq.id) && faq.id }" class="collapsible">
           <p *ngIf="!isAdmin && faq.answer" class="list-group-item-text">{{faq.answer}}</p>
           <text-editor
             *ngIf="isAdmin && faq.answer"

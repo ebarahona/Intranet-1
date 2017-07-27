@@ -1,11 +1,12 @@
 ﻿import { Component, OnInit } from '@angular/core'
+import * as _ from 'lodash'
+import { Observable } from 'rxjs/Observable'
 import {
   Category,
   Faq,
   FaqByCategory
 } from '../../models'
 import { AuthenticationService, FaqService } from '../../_services'
-import * as _ from 'lodash'
 
 // See https://github.com/lodash/lodash/issues/1677#issuecomment-306119559
 const toggler = (collection, item) => {
@@ -77,6 +78,18 @@ export class FaqComponent implements OnInit {
   updateData() {
     this.faqService.getFaqsByCategory().subscribe(
         faqByCategories => {
+          if (this.isAdmin) {
+            for (const faqByCategory of faqByCategories) {
+              const newFaq = new Faq()
+              newFaq.category = new Category()
+              newFaq.answer = 'Enter a new answer.'
+              newFaq.question = 'Enter a new question.'
+              newFaq.keywords = 'Add Keywords!'
+              newFaq.category.title = faqByCategory.category.title
+
+              faqByCategory.faqs.push(newFaq)
+            }
+          }
           this.faqByCategories = faqByCategories
         }
       )
@@ -86,16 +99,26 @@ export class FaqComponent implements OnInit {
     faq.category.faqs = null
     faq.faqKeywords = null
 
-    await this.faqService.putItem(faq).subscribe(
-      (faq) => {
-          this.saved.faqId = faq.id
-          this.saved.success = 'Updated successfully!'
-          this.saved.error = null
+    let obs: Observable<Faq>
+
+    if (faq.id) {
+      obs = await this.faqService.putItem(faq)
+    } else {
+      obs = await this.faqService.postItem(faq)
+    }
+
+    obs.subscribe(
+      (data) => {
+        faq.id = data.id
+        this.saved.faqId = data.id
+        this.saved.success = 'Updated successfully!'
+        this.saved.error = null
+        this.updateData()
       },
       error => {
-          this.saved.faqId = faq.id
-          this.saved.success = null
-          this.saved.error = error
+        this.saved.faqId = faq.id
+        this.saved.success = null
+        this.saved.error = error
       }
     )
   }
