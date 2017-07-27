@@ -1,4 +1,61 @@
 ﻿<div class="container-fluid">
-  <h3>FAQ</h3>&nbsp;
-
+  <h1>FAQ</h1>&nbsp;
+  <div *ngFor="let faqByCategory of faqByCategories">
+    <h2 id="{{faqByCategory.category.url}}">
+      <span *ngIf="!isAdmin && faqByCategory && faqByCategory.category.title">
+        {{faqByCategory.category.title}}
+      </span>
+      <text-editor
+        *ngIf="isAdmin && faqByCategory && faqByCategory.category.title"
+        [inline]="true"
+        [elementId]="'edit-title-category-' + faqByCategory.category.id"
+        [text]="faqByCategory.category.title"
+        (onEditorContentChange)="onEditorContentChange($event)"
+      ></text-editor>
+    </h2>
+    <div class="list-group" (click)="$event.preventDefault()">
+      <a *ngFor="let faq of faqByCategory.faqs" id="{{faq.url}}" href="#" (click)="!isAdmin && toggle(faq.id)" class="list-group-item">
+        <h4 class="list-group-item-heading">
+          <span
+            (click)="isAdmin && toggle(faq.id)"
+            class="glyphicon"
+            [ngClass]="{ 'glyphicon-minus': isOpen(faq.id), 'glyphicon-plus': !isOpen(faq.id) }"
+            aria-hidden="true"
+          ></span>&nbsp;
+          <span *ngIf="!isAdmin && faq.question">
+            {{faq.question}}
+          </span>
+          <text-editor
+            *ngIf="isAdmin && faq.question"
+            [inline]="true"
+            [elementId]="'edit-title-editor-question-' + faq.id"
+            [text]="faq.question"
+            (onEditorContentChange)="onEditorContentChange($event)"
+          ></text-editor>
+        </h4>
+        <div [ngClass]="{ 'collapsed': !isOpen(faq.id) }" class="collapsible">
+          <p *ngIf="!isAdmin && faq.answer" class="list-group-item-text">{{faq.answer}}</p>
+          <text-editor
+            *ngIf="isAdmin && faq.answer"
+            class="list-group-item-text"
+            [inline]="true"
+            [elementId]="'edit-title-editor-answer-' + faq.id"
+            [text]="faq.answer"
+            (onEditorContentChange)="onEditorContentChange($event)"
+          ></text-editor>
+          <keywords-strip
+            *ngIf="!isAdmin"
+            [keywords]="faq.keywords"
+          ></keywords-strip>
+          <keywords-strip
+            *ngIf="isAdmin"
+            [edit]="true"
+            [keywords]="faq.keywords"
+            [elementId]="'edit-keywords-' + faq.id"
+            (onEditorContentChange)="onEditorContentChange($event)"
+          ></keywords-strip>
+        </div>
+      </a>
+    </div>
+  </div>
 </div>

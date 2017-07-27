@@ -1,5 +1,15 @@
-﻿@import url(https://fonts.googleapis.com/css?family=Roboto);
+﻿.list-group-item-heading {
+  font-size: 2rem;
+}
 
-  h3, a, p, label, input {
-  	font-family: 'Roboto';
-  }
+.list-group-item-text {
+  font-size: 1.7rem;
+}
+
+.list-group-item-heading ~ .collapsible.collapsed {
+  height: 0px;
+  overflow: hidden;
+}
+ .list-group-item-heading ~ .collapsible {
+   height: 100%;
+}

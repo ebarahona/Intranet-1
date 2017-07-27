@@ -1,6 +1,17 @@
 ﻿import { Component, OnInit } from '@angular/core'
-import { Faq } from '../../models'
-import { FaqService } from '../../_services'
+import * as _ from 'lodash'
+import { Faq, FaqByCategory } from '../../models'
+import { AuthenticationService, FaqService } from '../../_services'
+
+// See https://github.com/lodash/lodash/issues/1677#issuecomment-306119559
+const toggler = (collection, item) => {
+    const idx = _.indexOf(collection, item)
+    if (idx !== -1) {
+        collection.splice(idx, 1)
+    } else {
+        collection.push(item)
+    }
+}
 
 @Component({
   selector: 'faq',
@@ -9,24 +20,42 @@ import { FaqService } from '../../_services'
 
 })
 export class FaqComponent implements OnInit {
-  faqs: Faq[]
+  faqByCategories: FaqByCategory[]
+  openFaqs: number[]
+  isAdmin: boolean
 
   constructor(
-      private faqService: FaqService,
-  ) { }
+    private authenticationService: AuthenticationService,
+    private faqService: FaqService
+  ) {
+    this.openFaqs = []
+  }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.updateData()
+    this.isAdmin = await this.authenticationService.isAdmin()
+  }
+
+  onEditorContentChange(content: string) {
+    console.log(content)
   }
 
   handleOnDelete(info: string) {
     this.updateData()
   }
 
+  toggle(id: number) {
+    _.partial(toggler, this.openFaqs)(id)
+  }
+
+  isOpen(id: number) {
+    return _.includes(this.openFaqs, id)
+  }
+
   updateData() {
-    this.faqService.getItems().subscribe(
-        faqs => {
-          this.faqs = faqs
+    this.faqService.getFaqsByCategory().subscribe(
+        faqByCategories => {
+          this.faqByCategories = faqByCategories
         }
       )
   }
