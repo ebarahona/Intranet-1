@@ -45,7 +45,6 @@ export class TextEditorComponent implements AfterViewInit, OnDestroy {
 
     ngAfterViewInit() {
         if (this.ClientSide) {
-          console.log(this.text)
             require.ensure([
                 'tinymce'
             ], require => {
