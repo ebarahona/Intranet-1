@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 
 namespace Intranet.API.UnitTests.TestHelpers
@@ -16,15 +17,13 @@ namespace Intranet.API.UnitTests.TestHelpers
         public static IEnumerable<T> GetResponsesAs<T>(this IActionResult actionResult)
             where T : class
         {
-            var okObjectResult = actionResult as OkObjectResult;
-            return okObjectResult.Value as IEnumerable<T>;
+            return GetResponseAs<IEnumerable<T>>(actionResult);
         }
 
         public static T GetResponseAs<T>(this IActionResult actionResult)
             where T : class
         {
-            var okObjectResult = actionResult as OkObjectResult;
-            return okObjectResult.Value as T;
+            return actionResult.GetType().GetProperty("Value").GetValue(actionResult) as T;
         }
     }
 }
