@@ -50,6 +50,7 @@ namespace Intranet.API.Controllers
                     return NotFound();
                 }
 
+                // If the FAQ is the only one attached to a category then delete the category as well
                 if (faq.Category.HasNoRelatedEntities(faq))
                 {
                     _context.Remove(faq.Category);
